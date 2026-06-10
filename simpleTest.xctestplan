@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "C998AE1E-D24D-489B-9FBB-5CB597B5F072",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:xkcd.xcodeproj",
+        "identifier" : "AE96C8692E988C1800F3AD88",
+        "name" : "xkcdTests"
+      }
+    }
+  ],
+  "version" : 1
+}
