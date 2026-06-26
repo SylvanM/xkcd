@@ -42,7 +42,6 @@
 				Model/ComicDetail.swift,
 				Model/ComicManager.swift,
 				Model/ComicTag.swift,
-				README.md,
 				xkcdApp.swift,
 				ZoomableComicImage.swift,
 			);
@@ -60,7 +59,6 @@
 				Model/ComicDetail.swift,
 				Model/ComicManager.swift,
 				Model/ComicTag.swift,
-				README.md,
 				xkcdApp.swift,
 				ZoomableComicImage.swift,
 			);
