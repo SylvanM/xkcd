@@ -48,30 +48,31 @@ struct ComicDetailView: View {
                     ZoomableComicImageView(image: UIImage(data: comicDetail.imageData)!)
                         .toolbar {
                             ToolbarItem(placement: .bottomBar) {
-                                HStack { // Use HStack for multiple trailing items
-                                    Button {
-                                        showAltText = true
-                                    } label: {
-                                        Image(systemName: "pointer.arrow.motionlines")
-                                    }
-                                    
-                                    Button {
-                                        print("Going up")
-                                    } label: {
-                                        Image(systemName: "chevron.up")
-                                    }
-                                    
-                                    Button {
-                                        print("Going down")
-                                    } label: {
-                                        Image(systemName: "chevron.down")
-                                    }
-                                    
-                                    Button {
-                                        print("Going to random comic")
-                                    } label: {
-                                        Image(systemName: "shuffle")
-                                    }
+                                Button {
+                                    showAltText = true
+                                } label: {
+                                    Image(systemName: "pointer.arrow.motionlines")
+                                }
+                            }
+                            ToolbarItem(placement: .bottomBar) {
+                                Button {
+                                    print("Going up")
+                                } label: {
+                                    Image(systemName: "chevron.up")
+                                }
+                            }
+                            ToolbarItem(placement: .bottomBar) {
+                                Button {
+                                    print("Going down")
+                                } label: {
+                                    Image(systemName: "chevron.down")
+                                }
+                            }
+                            ToolbarItem(placement: .bottomBar) {
+                                Button {
+                                    print("Going to random comic")
+                                } label: {
+                                    Image(systemName: "shuffle")
                                 }
                             }
                         }
