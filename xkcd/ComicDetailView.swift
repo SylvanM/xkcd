@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-internal import Combine
 
 typealias ComicAndImage = (ComicDetail, UIImage?)
 typealias TagAndIndex = (tag: ComicTag, index: Int)
@@ -66,8 +65,7 @@ struct ComicDetailView: View {
             Group {
                 if let (comicDetail, possibleImage) = comicAndImage {
                     if let comicImage = possibleImage {
-                        Image(uiImage: comicImage)
-//                        ZoomableComicImageView(image: comicImage)
+                        ZoomableComicImage(image: comicImage, imageID: self.number)
                             .toolbar {
                                 ToolbarItem(placement: .bottomBar) {
                                     Button {
