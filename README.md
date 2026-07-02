@@ -30,6 +30,16 @@ because coding in Swift and in Xcode is one of life's greatest joys.
 
 These are changes I wish to make in future updates.
 
+### Features I want to add
+
+* Search bar - don't just search comic titles, but store the text in comics to search over that as well.
+* Favorites
+* Random Comic - With a setting to "prefer unread," so you can shuffle to a random unread comic!
+
+### Changes I want to make
+
 * Don't store image data in SwiftData, store a URL to the image on device instead.
 * Make it optional whether or not the user saves an image forever. Some people don't want their storage used up by thousands of webcomics (though I personally do)
+* Somehow a comic should be able to be downloaded without being read. I want to be able to read comics I haven't seen before while I'm camping.
+
 

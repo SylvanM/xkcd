@@ -12,6 +12,9 @@ struct ComicListView: View {
     
     @Query(sort: \ComicTag.number, order: .reverse) private var allComicTags: [ComicTag]
     
+    @State private var searchText: String = ""
+    @State private var searchBarOnTop: Bool = Settings.searchBarOnTop
+    
     var body: some View {
         NavigationSplitView {
             List(allComicTags) { comicTag in
@@ -50,6 +53,11 @@ struct ComicListView: View {
                 ComicDetailView(tag)
             }
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink(destination: SettingsView(searchBarOnTop: $searchBarOnTop)) {
+                        Image(systemName: "gearshape")
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         if let url = URL(string: "https://xkcd.com/license.html") {
@@ -60,6 +68,7 @@ struct ComicListView: View {
                     }
                 }
             }
+            .searchable(text: $searchText, placement: .automatic)
         } detail: {
             Text("Huh?")
         }

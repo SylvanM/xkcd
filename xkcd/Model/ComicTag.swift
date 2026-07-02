@@ -13,13 +13,13 @@ import SwiftData
 final class ComicTag: Comparable, Codable, CustomDebugStringConvertible, Identifiable {
     
     /// Title of the comic
-    var name: String
+    @Attribute var name: String
     
     /// The number of the comic
     @Attribute(.unique) var number: Int
     
     /// Whether or not this comic has been read yet
-    var hasBeenRead: Bool
+    @Attribute var hasBeenRead: Bool
     
     /// Whether or not this comic is saved
     var isSaved: Bool {

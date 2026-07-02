@@ -43,17 +43,19 @@ class ComicManager {
         // Just to create a singleton instance
     }
     
-    // MARK: Methods
+    
     
     // Call this function right after the ModelContainer is ready
     func initializeActor(container: ModelContainer) {
         self.container = container
         // Instantiate the actor in a detached Task at startup
-        Task.detached {
+        Task { @MainActor in
             self.backgroundModelActor = BackgroundModelActor(modelContainer: container)
             print("BackgroundDataActor initialized at app startup.")
         }
     }
+    
+    // MARK: Server Methods
     
     /// Saves all new unseen tags
     class func refresh(reportTotal: ((Int) -> ())? = nil, addOne: (() -> ())? = nil, completion: (() -> ())? = nil, errorCompletion: (() -> ())? = nil) async {
@@ -63,30 +65,25 @@ class ComicManager {
                 
                 reportTotal?(numbers.count)
                 
-                do {
-                    print("Downloading \(numbers)")
-                    
-                    let group = DispatchGroup()
-                    
-                    let tasks = numbers.map { number in
-                        ComicManager.downloadTagTask(number: number) {
-                            addOne?()
-                            group.leave()
-                        }
+                print("Downloading \(numbers)")
+                
+                let group = DispatchGroup()
+                
+                let tasks = numbers.map { number in
+                    ComicManager.downloadTagTask(number: number) {
+                        addOne?()
+                        group.leave()
                     }
-                    
-                    for task in tasks {
-                        group.enter()
-                        task.resume()
-                    }
-                    
-                    group.notify(queue: .main) {
-                        print("Queue is done")
-                        completion?()
-                    }
-                } catch {
-                    print("Error on creating model context: \(error)")
-                    errorCompletion?()
+                }
+                
+                for task in tasks {
+                    group.enter()
+                    task.resume()
+                }
+                
+                group.notify(queue: .main) {
+                    print("Queue is done")
+                    completion?()
                 }
                 
             case .unableToFetch:
@@ -189,7 +186,14 @@ class ComicManager {
                     let comicInfo = try JSONSerialization.jsonObject(with: data) as! [String : Any]
                     
                     if let imagePath = comicInfo["img"] as? String {
-                        let imageURL = URL(string: imagePath)!
+                        
+                        // The images that come from the default path are pretty low-res, and not nice to look at.
+                        // However, xkcd stores higher-res versions for normal website viewing, with a '_2x'
+                        // appended after the image name. That's what we want!
+                        var imagePath2x = imagePath
+                        imagePath2x = imagePath2x.replacingOccurrences(of: ".png", with: "_2x.png")
+                        
+                        let imageURL = URL(string: imagePath2x)!
                         
                         let imageTask = URLSession.shared.dataTask(with: imageURL) { imageData, _, _ in
                             if let imageData = imageData {
@@ -226,4 +230,30 @@ class ComicManager {
         task.resume()
     }
     
+    // MARK: Local Pass-through Methods
+    
+    
+    class func getTag(after tag: ComicTag) -> ComicTag? {
+        ComicManager.shared.backgroundModelActor!.getTag(after: tag)
+    }
+    
+    class func getTag(before tag: ComicTag) -> ComicTag? {
+        ComicManager.shared.backgroundModelActor!.getTag(before: tag)
+    }
+    
+    class func getRandomTag(preferUnread: Bool) -> ComicTag {
+        ComicManager.shared.backgroundModelActor!.getRandomTag(preferUnread: preferUnread)
+    }
+    
+    class func getComicDetail(forTag tag: ComicTag) -> ComicDetail? {
+        ComicManager.shared.backgroundModelActor!.getComicDetail(forTag: tag)
+    }
+    
+    class func getTag(forNumber number: Int) -> ComicTag {
+        ComicManager.shared.backgroundModelActor!.getTag(forNumber: number)
+    }
+    
+    class func getTagContext(forTag tag: ComicTag) -> (index: Int, allTags: [ComicTag]) {
+        ComicManager.shared.backgroundModelActor!.getTagContext(forTag: tag)
+    }
 }

@@ -6,14 +6,10 @@
     {
       "layers" : [
         {
-          "blend-mode" : "normal",
-          "fill" : "automatic",
-          "glass" : true,
-          "hidden" : false,
-          "image-name" : "BlackHat.png",
-          "name" : "BlackHat",
+          "image-name" : "BlackHat_head.jpg",
+          "name" : "BlackHat_head",
           "position" : {
-            "scale" : 2.56,
+            "scale" : 1.42,
             "translation-in-points" : [
               0,
               0

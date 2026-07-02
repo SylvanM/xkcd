@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2667EC4A2FF0105C00D3EE1F /* xkcd App Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 2667EC492FF0105C00D3EE1F /* xkcd App Icon.icon */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		AE96C86B2E988C1800F3AD88 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +28,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2621D9642FF073F50006CC46 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2667EC492FF0105C00D3EE1F /* xkcd App Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "xkcd App Icon.icon"; sourceTree = "<group>"; };
 		AE96C85B2E988C1600F3AD88 /* xkcd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = xkcd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE96C86A2E988C1800F3AD88 /* xkcdTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = xkcdTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE96C8742E988C1800F3AD88 /* xkcdUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = xkcdUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,7 +40,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
-				"BlackHat App Icon.icon",
 				ComicDetailView.swift,
 				ComicListView.swift,
 				LoadingView.swift,
@@ -42,6 +47,8 @@
 				Model/ComicDetail.swift,
 				Model/ComicManager.swift,
 				Model/ComicTag.swift,
+				Model/Settings.swift,
+				SettingsView.swift,
 				xkcdApp.swift,
 				ZoomableComicImage.swift,
 			);
@@ -51,7 +58,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
-				"BlackHat App Icon.icon",
 				ComicDetailView.swift,
 				ComicListView.swift,
 				LoadingView.swift,
@@ -59,6 +65,8 @@
 				Model/ComicDetail.swift,
 				Model/ComicManager.swift,
 				Model/ComicTag.swift,
+				Model/Settings.swift,
+				SettingsView.swift,
 				xkcdApp.swift,
 				ZoomableComicImage.swift,
 			);
@@ -116,6 +124,8 @@
 		AE96C8522E988C1600F3AD88 = {
 			isa = PBXGroup;
 			children = (
+				2621D9642FF073F50006CC46 /* README.md */,
+				2667EC492FF0105C00D3EE1F /* xkcd App Icon.icon */,
 				AE3A26BC2E98950B0090FEC3 /* xkcd */,
 				AE96C86D2E988C1800F3AD88 /* xkcdTests */,
 				AE96C8772E988C1800F3AD88 /* xkcdUITests */,
@@ -251,6 +261,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2667EC4A2FF0105C00D3EE1F /* xkcd App Icon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,7 +443,7 @@
 		AE96C87F2E988C1800F3AD88 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "xkcd App Icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -467,7 +478,7 @@
 		AE96C8802E988C1800F3AD88 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "xkcd App Icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
