@@ -8,10 +8,12 @@
 import SwiftUI
 import SwiftData
 
-typealias ComicAndImage = (ComicDetail, UIImage?)
+typealias ComicAndImage = (comic: ComicDetail, image: UIImage?)
 typealias TagAndIndex = (tag: ComicTag, index: Int)
 
 struct ComicDetailView: View {
+    
+    private let maxReloadDepth = 4
     
     private let allTags: [ComicTag]
     
@@ -33,20 +35,6 @@ struct ComicDetailView: View {
     
     @State private var isLoading = false
     @State private var showAltText: Bool = false
-    
-//    let longPressTimer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
-//    @State private var startTime = Date()
-//    @State private var timerIsRunning = false
-//    
-//    let altTextHoldTime = 0.7
-//    
-//    
-    
-//    private var comic: ComicDetail? {
-//        ComicManager.getComicDetail(forTag: comicTag)
-//    }
-    
-//    @State private var shouldUpdateView = true
     
     init(_ comicTag: ComicTag) {
         let (index, allTags) = ComicManager.getTagContext(forTag: comicTag)
@@ -147,14 +135,23 @@ struct ComicDetailView: View {
         }
     }
     
-    private func reloadComic() {
+    private func reloadComic(depth: Int = 0, forceDownload: Bool = false) {
+        
+        if depth >= maxReloadDepth {
+            return
+        }
+        
         self.showAltText = false
         
         print("Reloading")
         
-        if let existingComic = ComicManager.getComicDetail(forTag: tag) {
+        if !forceDownload, let existingComic = ComicManager.getComicDetail(forTag: tag) {
             self.comicAndImage = (existingComic, UIImage(data: existingComic.imageData))
-            print("Comic exists, image updated, image is \(comicAndImage!.1)")
+            
+            if self.comicAndImage?.image == nil {
+                reloadComic(depth: depth + 1, forceDownload: true)
+            }
+            
             return
         }
         
@@ -181,9 +178,12 @@ struct ComicDetailView: View {
                     
                     if let comicDetail = possibleComicDetail {
                         let image = UIImage(data: comicDetail.imageData)
-                        
-                        print("Setting new comicAndImage")
+
                         self.comicAndImage = (comicDetail, image)
+                        
+                        if image == nil {
+                            reloadComic(depth: depth + 1, forceDownload: true)
+                        }
                     } else {
                         print("SOMETHING TERRIBLE HAPPENED")
                         return
