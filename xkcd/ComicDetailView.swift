@@ -63,55 +63,9 @@ struct ComicDetailView: View {
     var body: some View {
         NavigationView {
             Group {
-                if let (comicDetail, possibleImage) = comicAndImage {
+                if let (comicDetail, possibleImage) = comicAndImage, comicDetail.number == number {
                     if let comicImage = possibleImage {
                         ZoomableComicImage(image: comicImage, imageID: self.number)
-                            .toolbar {
-                                ToolbarItem(placement: .bottomBar) {
-                                    Button {
-                                        showAltText = true
-                                    } label: {
-                                        Image(systemName: "pointer.arrow.motionlines")
-                                    }
-                                }
-                                ToolbarItem(placement: .bottomBar) {
-                                    Button {
-                                        let newIndex = tagAndIndex.index + 1
-                                        let newTag = allTags[newIndex]
-                                        
-                                        self.tagAndIndex = (newTag, newIndex)
-                                        
-                                        reloadComic()
-                                    } label: {
-                                        Image(systemName: "chevron.up")
-                                    }
-                                    .disabled(tagAndIndex.index >= allTags.endIndex - 1)
-                                }
-                                ToolbarItem(placement: .bottomBar) {
-                                    Button {
-                                        let newIndex = tagAndIndex.index - 1
-                                        let newTag = allTags[newIndex]
-                                        
-                                        self.tagAndIndex = (newTag, newIndex)
-                                        
-                                        reloadComic()
-                                    } label: {
-                                        Image(systemName: "chevron.down")
-                                    }
-                                    .disabled(tagAndIndex.index < 0)
-                                }
-                                ToolbarItem(placement: .bottomBar) {
-                                    Button {
-//                                        
-//                                        
-//                                        
-//                                        let randomNumber = ComicManager.getRandomTag(preferUnread: preferUnread).number
-//                                        self.number = randomNumber
-                                    } label: {
-                                        Image(systemName: "shuffle")
-                                    }
-                                }
-                            }
                             .sheet(isPresented: $showAltText) {
                                 ScrollView {
                                     Text(comicDetail.altText)
@@ -120,24 +74,6 @@ struct ComicDetailView: View {
                                 .presentationDetents([.medium, .large])
                                 .presentationDragIndicator(.visible)
                             }
-//                            .onLongPressGesture(minimumDuration: 1, maximumDistance: 5) {
-//                                // Do nothing I guess?
-//                            } onPressingChanged: { isPressed in
-//                                if !timerIsRunning && isPressed {
-//                                    timerIsRunning = true
-//                                    startTime = Date()
-//                                }
-//                            }
-//                            .onReceive(longPressTimer) { _ in
-//                                if timerIsRunning {
-//                                    let elapsed = Date().timeIntervalSince(self.startTime)
-//                                    
-//                                    if elapsed > altTextHoldTime {
-//                                        timerIsRunning = false
-//                                        showAltText = true
-//                                    }
-//                                }
-//                            }
                             .onAppear {
                                 tagAndIndex.tag.hasBeenRead = true
                             }
@@ -148,6 +84,50 @@ struct ComicDetailView: View {
                     ProgressView()
                 }
             }
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        showAltText = true
+                    } label: {
+                        Image(systemName: "pointer.arrow.motionlines")
+                    }
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        let newIndex = tagAndIndex.index + 1
+                        let newTag = allTags[newIndex]
+                        
+                        self.tagAndIndex = (newTag, newIndex)
+                    } label: {
+                        Image(systemName: "chevron.up")
+                    }
+                    .disabled(tagAndIndex.index >= allTags.endIndex - 1)
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        let newIndex = tagAndIndex.index - 1
+                        let newTag = allTags[newIndex]
+                        
+                        self.tagAndIndex = (newTag, newIndex)
+                    } label: {
+                        Image(systemName: "chevron.down")
+                    }
+                    .disabled(tagAndIndex.index < 0)
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        
+                        let newIndex = allTags.indices.randomElement()!
+                        let newTag = allTags[newIndex]
+                        
+                        self.tagAndIndex = (newTag, newIndex)
+                    } label: {
+                        Image(systemName: "shuffle")
+                    }
+                    .disabled(allTags.isEmpty) // should never happen if we are in this view
+                }
+            }
+            
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -162,10 +142,9 @@ struct ComicDetailView: View {
         }
         .navigationTitle(tagAndIndex.tag.name)
         .navigationBarTitleDisplayMode(.inline)
-//        .task(id: number) {
-//            print("Number updated to \(number)")
-//            await loadComic(number)
-//        }
+        .onChange(of: number, initial: true) {
+            reloadComic()
+        }
     }
     
     private func reloadComic() {
@@ -175,19 +154,23 @@ struct ComicDetailView: View {
         
         if let existingComic = ComicManager.getComicDetail(forTag: tag) {
             self.comicAndImage = (existingComic, UIImage(data: existingComic.imageData))
-            print("Comic exists, image updated")
+            print("Comic exists, image updated, image is \(comicAndImage!.1)")
             return
         }
         
         Task {
+            print("Entering task")
             await ComicManager.retrieve(number: tag.number) { downloadedComic in
+                print("Got \(String(describing: downloadedComic))")
                 guard let downloadedComic else {
                     print("No image available for comic \(tag.number)")
                     return
                 }
                 
                 Task {
+                    print("Started the whole assignment task")
                     await ComicManager.model.addComic(comic: downloadedComic)
+                    print("Added the comic to the stored DB")
                     
                     // Only update the screen if the user has not already moved on.
                     guard self.number == tag.number else {
@@ -199,9 +182,11 @@ struct ComicDetailView: View {
                     if let comicDetail = possibleComicDetail {
                         let image = UIImage(data: comicDetail.imageData)
                         
+                        print("Setting new comicAndImage")
                         self.comicAndImage = (comicDetail, image)
                     } else {
-                        fatalError("Something terrible happened")
+                        print("SOMETHING TERRIBLE HAPPENED")
+                        return
                     }
                 }
             }

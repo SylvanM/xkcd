@@ -176,4 +176,8 @@ actor BackgroundModelActor {
         }
     }
     
+    func getOldestUnread() -> ComicTag? {
+        getAllTags(onlyIfUnread: true).first
+    }
+    
 }

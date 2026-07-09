@@ -13,12 +13,26 @@ struct SettingsView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                PreferUnreadOptionView()
-                SearchBarPositionOptionView(searchBarOnTop: $searchBarOnTop)
+            VStack {
+                List {
+                    PreferUnreadOptionView()
+                    SearchBarPositionOptionView(searchBarOnTop: $searchBarOnTop)
+                    DownloadOnViewOption()
+                    
+                    Button {
+                        print("Download Every Single Comic")
+                    } label: {
+                        Text("Download All Comics")
+                    }
+                    Button {
+                        Settings.writeDefaults(overwritingUserSettings: true)
+                    } label: {
+                        Text("Reset to Default Settings")
+                    }
+                }
+                .navigationTitle("Settings")
+                .navigationBarTitleDisplayMode(.large)
             }
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
@@ -41,6 +55,17 @@ struct SearchBarPositionOptionView: View {
         Toggle("Search bar on top", isOn: $searchBarOnTop)
             .onChange(of: searchBarOnTop) { _, newValue in
                 Settings.searchBarOnTop = newValue
+            }
+    }
+}
+
+struct DownloadOnViewOption: View {
+    @State var downloadOnView: Bool = Settings.downloadOnView
+    
+    var body: some View {
+        Toggle("Download on View", isOn: $downloadOnView)
+            .onChange(of: downloadOnView) { _, newValue in
+                Settings.downloadOnView = newValue
             }
     }
 }

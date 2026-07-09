@@ -29,6 +29,7 @@ struct xkcdApp: App {
     }()
     
     init() {
+        Settings.writeDefaults()
         ComicManager.shared.initializeActor(container: self.sharedModelContainer)
     }
     

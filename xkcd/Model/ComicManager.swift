@@ -230,6 +230,18 @@ class ComicManager {
         task.resume()
     }
     
+    class func downloadAllComics(estimatedTotalAmount: @escaping (Int) -> (), progressUpdated: @escaping (Int, Int) -> (), completion: @escaping () -> (), errorCompletion: @escaping () -> ()) async {
+        
+//        await refresh {  in
+//            <#code#>
+//        } completion: {
+//            <#code#>
+//        } errorCompletion: {
+//            <#code#>
+//        }
+
+    }
+    
     // MARK: Local Pass-through Methods
     
     
@@ -255,5 +267,10 @@ class ComicManager {
     
     class func getTagContext(forTag tag: ComicTag) -> (index: Int, allTags: [ComicTag]) {
         ComicManager.shared.backgroundModelActor!.getTagContext(forTag: tag)
+    }
+
+    /// Returns the oldest unread comic, or `nil` if all are read
+    class func getOldestUnread() -> ComicTag? {
+        ComicManager.shared.backgroundModelActor!.getOldestUnread()
     }
 }

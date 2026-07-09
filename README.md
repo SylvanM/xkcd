@@ -41,5 +41,7 @@ These are changes I wish to make in future updates.
 * Don't store image data in SwiftData, store a URL to the image on device instead.
 * Make it optional whether or not the user saves an image forever. Some people don't want their storage used up by thousands of webcomics (though I personally do)
 * Somehow a comic should be able to be downloaded without being read. I want to be able to read comics I haven't seen before while I'm camping.
-
+* Keep track of where the list view was before the app was closed so we can resume
+* Hold down for alt-text, maybe with haptic feedback
+* Actually make the settings view WORK CORRECTLY lol
 
