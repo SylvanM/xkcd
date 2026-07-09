@@ -9,31 +9,25 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    @Binding var searchBarOnTop: Bool
-    
     var body: some View {
         NavigationView {
             VStack {
                 List {
-                    Section {
-                        ForEach(Settings.SettingKey.allCases) { settingKey in
-                            SettingItemView(key: settingKey)
-                        }
-                    }
-                    
-                    Section {
-                        Button(role: .confirm) {
-                            print("Download Every Single Comic")
-                        } label: {
-                            Text("Download All Comics")
-                        }
-                        Button(role: .destructive) {
-                            Settings.writeDefaults(overwritingUserSettings: true)
-                        } label: {
-                            Text("Reset to Default Settings")
-                        }
+                    ForEach(Settings.SettingKey.allCases) { settingKey in
+                        SettingItemView(key: settingKey)
                     }
                 }
+                Button("Download All Comics") {
+                    print("Download Every Single Comic")
+                }
+                .buttonStyle(.bordered)
+
+                Button("Reset to Default Settings", role: .destructive) {
+                    withAnimation {
+                        Settings.writeDefaults(overwritingUserSettings: true)
+                    }
+                }
+                .buttonStyle(.bordered)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
@@ -53,7 +47,7 @@ struct SettingItemView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Toggle(Settings.title(forSetting: key), isOn: $settingToggle)
                 .onChange(of: settingToggle) { _, newValue in
                     Settings[key] = newValue

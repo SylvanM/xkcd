@@ -26,13 +26,18 @@ class Settings {
         /// Whether or not we automatically download the new comics that we detect upon refreshing
         case downloadOnRefresh  = "downloadOnRefresh"
         
+        /// Whether or not to use the system's color theme (dark or light mode) instead of the default light mode
+        /// that I think makes the comics look better
+        case useSystemDefaultTheme = "useSystemDefaultTheme"
+        
     }
     
     private static let defaultSettings: [SettingKey : Bool] = [
-        .searchBarOnTop     : true,
-        .preferUnread       : true,
-        .downloadOnView     : false,
-        .downloadOnRefresh  : false,
+        .searchBarOnTop         : true,
+        .preferUnread           : true,
+        .downloadOnView         : false,
+        .downloadOnRefresh      : false,
+        .useSystemDefaultTheme  : false,
     ]
     
     private static let defaults = UserDefaults.standard
@@ -59,21 +64,20 @@ class Settings {
             "Download on View"
         case .downloadOnRefresh:
             "Download on Refresh"
+        case .useSystemDefaultTheme:
+            "Use System Colors"
         }
     }
     
     /// Returns the description of a particular setting for more detail
     public static func description(forSetting key: SettingKey) -> String {
-        switch key {
-        case .searchBarOnTop:
-            "When on, the search bar appears at the top of the list page."
-        case .preferUnread:
-            "When on, shuffling to a random comic will go to one that you haven't already read, if such a comic exists."
-        case .downloadOnView:
-            "When on, a comic is automatically saved to your device when you open it. (Storage conscious people may leave this off)"
-        case .downloadOnRefresh:
-            "When on, any comic that is detected on a refresh will be automatically saved to your device. (Storage conscious people may leave this off)"
-        }
+        [
+            .searchBarOnTop: "When on, the search bar appears at the top of the list page.",
+            .preferUnread: "When on, shuffling to a random comic will go to one that you haven't already read, if such a comic exists.",
+            .downloadOnView: "When on, a comic is automatically saved to your device when you open it. (Storage conscious people may leave this off)",
+            .downloadOnRefresh: "When on, any comic that is detected on a refresh will be automatically saved to your device. (Storage conscious people may leave this off)",
+            .useSystemDefaultTheme : "In my opinion, the comic viewing looks better in light mode. But, a lot of people really like dark mode. I don't love the idea of doing color-inversion on the comics themselves, so this results in a white comic on a black background. I personally think this looks odd, but perhaps you disagree!",
+        ][key]!
     }
     
     // MARK: Subscripts

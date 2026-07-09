@@ -46,3 +46,4 @@ These are changes I wish to make in future updates.
 * Actually make the settings view WORK CORRECTLY lol
 * Ways to manage which comics you have stored
 * CONFIRM with the user before doing destructive or scary actions in settings
+* Update the Settings View when the user resets to default settings

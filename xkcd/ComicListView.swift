@@ -14,6 +14,7 @@ struct ComicListView: View {
     
     @State private var searchText: String = ""
     @State private var searchBarOnTop: Bool = Settings[.searchBarOnTop]
+    @State private var isRefreshing: Bool = false
     
     var body: some View {
         NavigationSplitView {
@@ -42,12 +43,14 @@ struct ComicListView: View {
                     .id(comicTag.number)
                 }
                 .refreshable {
+                    self.isRefreshing = true
+                    
                     await ComicManager.refresh { totalToDownload in
     //                    total = Double(totalToDownload)
                     } addOne: {
                         // Nothing
                     } completion: {
-                        // Just be done?
+                        self.isRefreshing = false
                     }
                 }
                 .navigationTitle("xkcd")
@@ -56,7 +59,7 @@ struct ComicListView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
-                        NavigationLink(destination: SettingsView(searchBarOnTop: $searchBarOnTop)) {
+                        NavigationLink(destination: SettingsView()) {
                             Image(systemName: "gearshape")
                         }
                     }
@@ -105,6 +108,7 @@ struct ComicListView: View {
         } detail: {
             Text("Huh?")
         }
+        .disabled(isRefreshing)
     }
 }
 
