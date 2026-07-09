@@ -15,57 +15,52 @@ struct SettingsView: View {
         NavigationView {
             VStack {
                 List {
-                    PreferUnreadOptionView()
-                    SearchBarPositionOptionView(searchBarOnTop: $searchBarOnTop)
-                    DownloadOnViewOption()
-                    
-                    Button {
-                        print("Download Every Single Comic")
-                    } label: {
-                        Text("Download All Comics")
+                    Section {
+                        ForEach(Settings.SettingKey.allCases) { settingKey in
+                            SettingItemView(key: settingKey)
+                        }
                     }
-                    Button {
-                        Settings.writeDefaults(overwritingUserSettings: true)
-                    } label: {
-                        Text("Reset to Default Settings")
+                    
+                    Section {
+                        Button(role: .confirm) {
+                            print("Download Every Single Comic")
+                        } label: {
+                            Text("Download All Comics")
+                        }
+                        Button(role: .destructive) {
+                            Settings.writeDefaults(overwritingUserSettings: true)
+                        } label: {
+                            Text("Reset to Default Settings")
+                        }
                     }
                 }
-                .navigationTitle("Settings")
-                .navigationBarTitleDisplayMode(.large)
             }
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
 
-struct PreferUnreadOptionView: View {
-    @State var preferUnread: Bool = Settings.preferUnread
+struct SettingItemView: View {
     
-    var body: some View {
-        Toggle("Shuffle to Unread Comic", isOn: $preferUnread)
-            .onChange(of: preferUnread) { _, newValue in
-                Settings.preferUnread = newValue
-            }
+    private let key: Settings.SettingKey
+    
+    @State var settingToggle: Bool
+    
+    init(key: Settings.SettingKey) {
+        self.key = key
+        self._settingToggle = State(initialValue: Settings[key])
     }
-}
-
-struct SearchBarPositionOptionView: View {
-    @Binding var searchBarOnTop: Bool
     
     var body: some View {
-        Toggle("Search bar on top", isOn: $searchBarOnTop)
-            .onChange(of: searchBarOnTop) { _, newValue in
-                Settings.searchBarOnTop = newValue
-            }
-    }
-}
-
-struct DownloadOnViewOption: View {
-    @State var downloadOnView: Bool = Settings.downloadOnView
-    
-    var body: some View {
-        Toggle("Download on View", isOn: $downloadOnView)
-            .onChange(of: downloadOnView) { _, newValue in
-                Settings.downloadOnView = newValue
-            }
+        VStack {
+            Toggle(Settings.title(forSetting: key), isOn: $settingToggle)
+                .onChange(of: settingToggle) { _, newValue in
+                    Settings[key] = newValue
+                }
+            Text(Settings.description(forSetting: key))
+                .font(.footnote)
+                .foregroundStyle(.gray)
+        }
     }
 }

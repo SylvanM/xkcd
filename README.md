@@ -44,4 +44,5 @@ These are changes I wish to make in future updates.
 * Keep track of where the list view was before the app was closed so we can resume
 * Hold down for alt-text, maybe with haptic feedback
 * Actually make the settings view WORK CORRECTLY lol
-
+* Ways to manage which comics you have stored
+* CONFIRM with the user before doing destructive or scary actions in settings

@@ -13,7 +13,7 @@ struct ComicListView: View {
     @Query(sort: \ComicTag.number, order: .reverse) private var allComicTags: [ComicTag]
     
     @State private var searchText: String = ""
-    @State private var searchBarOnTop: Bool = Settings.searchBarOnTop
+    @State private var searchBarOnTop: Bool = Settings[.searchBarOnTop]
     
     var body: some View {
         NavigationSplitView {
